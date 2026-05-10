@@ -289,63 +289,155 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // Show loading state
-        DOM.wsResult.innerHTML = `<div class="empty-ws-state"><p>${state.lang === 'en' ? 'Generating...' : 'កំពុងបង្កើត...'}</p></div>`;
+        DOM.wsResult.innerHTML = `<div class="empty-ws-state"><p>${state.lang === 'en' ? 'Creating IBL Worksheet...' : 'កំពុងរៀបចំសន្លឹកកិច្ចការ IBL...'}</p></div>`;
 
         setTimeout(() => {
-            let selectedLesson = null;
-            // Search for lesson
             const lessons = SCIENCE_DATA[gradeKey].lessons;
-            selectedLesson = lessons.find(l => 
+            const selectedLesson = lessons.find(l => 
                 l.title.en.toLowerCase().includes(topic) || 
                 l.title.kh.toLowerCase().includes(topic)
             );
 
             if (!selectedLesson) {
-                DOM.wsResult.innerHTML = `<div class="empty-ws-state"><p>${state.lang === 'en' ? 'Lesson not found for this grade. Try another topic!' : 'មិនមានមេរៀននេះសម្រាប់ថ្នាក់នេះទេ។ សាកល្បងប្រធានបទផ្សេង!'}</p></div>`;
+                DOM.wsResult.innerHTML = `<div class="empty-ws-state"><p>${state.lang === 'en' ? 'Lesson not found.' : 'រកមិនឃើញមេរៀននេះទេ។'}</p></div>`;
                 return;
             }
 
             const wsHTML = `
                 <div class="printable-ws" id="printable-worksheet">
-                    <div class="ws-header">
-                        <h1>${state.lang === 'en' ? 'Science Worksheet' : 'សន្លឹកកិច្ចការវិទ្យាសាស្ត្រ'}</h1>
-                        <p>${selectedLesson.title[state.lang]}</p>
-                        <div class="ws-info">
-                            <span>${state.lang === 'en' ? 'Name:' : 'ឈ្មោះ:'} ____________________</span>
-                            <span>${state.lang === 'en' ? 'Grade:' : 'ថ្នាក់:'} ${SCIENCE_DATA[gradeKey].title[state.lang]}</span>
-                            <span>${state.lang === 'en' ? 'Date:' : 'កាលបរិច្ឆេទ:'} ___/___/___</span>
+                    <div class="ws-header-ibl-official">
+                        <div class="ws-main-title">${state.lang === 'en' ? 'STUDENT WORKSHEET' : 'សន្លឹកកិច្ចការសិស្ស'}</div>
+                        <div class="ws-meta-grid">
+                            <span>${state.lang === 'en' ? 'Date:' : 'កាលបរិច្ឆេទ:'} ..................................</span>
+                            <span>${state.lang === 'en' ? 'Group:' : 'ក្រុមទី:'} ...................................</span>
+                            <span style="grid-column: span 2">${state.lang === 'en' ? 'Members:' : 'សមាជិក:'} ............................................................................</span>
                         </div>
                     </div>
-                    <div class="ws-body">
-                        <h2>I. ${state.lang === 'en' ? 'Lesson Summary' : 'សង្ខេបមេរៀន'}</h2>
-                        <p>${selectedLesson.content[state.lang]}</p>
+
+                    <div class="ws-content-official">
+                        <div class="ws-row"><strong>${state.lang === 'en' ? 'Topic:' : 'ប្រធានបទ:'}</strong> ${selectedLesson.title[state.lang]}</div>
                         
-                        <h2>II. ${state.lang === 'en' ? 'Exercise Questions' : 'សំណួរសិក្សា'}</h2>
-                        ${selectedLesson.quizzes.map((q, i) => `
-                            <div class="ws-question">
-                                <p>${i + 1}. ${q.question[state.lang]}</p>
-                                <div class="ws-answer-space"></div>
-                            </div>
-                        `).join('')}
-                        
-                        <div class="ws-question">
-                            <p>${selectedLesson.quizzes.length + 1}. ${state.lang === 'en' ? 'Explain what you learned from this lesson.' : 'ចូរពន្យល់ពីអ្វីដែលអ្នកបានរៀនពីមេរៀននេះ។'}</p>
-                            <div class="ws-answer-space" style="height:100px;"></div>
+                        <div class="ws-section-box">
+                            <h4>${state.lang === 'en' ? 'Learning Objectives' : 'វត្ថុបំណង'}</h4>
+                            <p>• ${state.lang === 'en' ? 'Students can describe the key concepts of' : 'សិស្សរៀបរាប់ពីខ្លឹមសារសំខាន់ៗនៃ'} ${selectedLesson.title[state.lang]} ${state.lang === 'en' ? 'correctly.' : 'បានត្រឹមត្រូវ។'}</p>
+                            <p>• ${state.lang === 'en' ? 'Students can analyze scientific phenomena related to this topic.' : 'សិស្សបកស្រាយពីបាតុភូតវិទ្យាសាស្ត្រដែលទាក់ទងនឹងប្រធានបទនេះបានត្រឹមត្រូវ។'}</p>
+                        </div>
+
+                        <div class="ws-section-box">
+                            <h4>${state.lang === 'en' ? '1. Phenomenon' : '១. ការបង្ហាញបាតុភូត'}</h4>
+                            <p>${state.lang === 'en' ? 'Based on your observation, why does' : 'តាមរយៈការសង្កេតរបស់អ្នក តើហេតុអ្វីបានជា'} ${selectedLesson.title[state.lang]} ${state.lang === 'en' ? 'happen?' : 'កើតឡើង?'}</p>
+                            <div class="ws-answer-space" style="height:40px;"></div>
+                        </div>
+
+                        <div class="ws-section-box">
+                            <h4>${state.lang === 'en' ? '2. Key Question' : '២. សំណួរគន្លឹះ'}</h4>
+                            <p><strong>${state.lang === 'en' ? 'Q:' : 'ស៖'}</strong> ${selectedLesson.quizzes[0].question[state.lang]}</p>
+                        </div>
+
+                        <div class="ws-section-box">
+                            <h4>${state.lang === 'en' ? '3. Hypothesis' : '៣. សម្មតិកម្ម (ចម្លើយព្រាង)'}</h4>
+                            <div class="ws-answer-space" style="height:60px;"></div>
+                        </div>
+
+                        <div class="ws-section-box">
+                            <h4>${state.lang === 'en' ? '4. Observation & Results' : '៤. ការសង្កេត និងលទ្ធផល'}</h4>
+                            <table class="ws-table-official">
+                                <thead>
+                                    <tr>
+                                        <th>${state.lang === 'en' ? 'Activities' : 'សកម្មភាព'}</th>
+                                        <th>${state.lang === 'en' ? 'Observation Questions' : 'សំណួរសង្កេត'}</th>
+                                        <th>${state.lang === 'en' ? 'Results' : 'លទ្ធផល'}</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>${state.lang === 'en' ? 'Read Content' : 'ការអានមេរៀន'}</td>
+                                        <td>${state.lang === 'en' ? 'What are the main points?' : 'តើអ្វីជាចំណុចសំខាន់?'}</td>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td>${state.lang === 'en' ? 'Discussion' : 'ការពិភាក្សាក្រុម'}</td>
+                                        <td>${state.lang === 'en' ? 'Explain the process.' : 'ចូរពន្យល់ពីដំណើរការ។'}</td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="ws-section-box">
+                            <h4>${state.lang === 'en' ? '5. Analysis & Conclusion' : '៥. ការវិភាគ និងសន្និដ្ឋាន'}</h4>
+                            <p><strong>៥.១ ${state.lang === 'en' ? 'Analysis:' : 'វិភាគ:'}</strong></p>
+                            <div class="ws-answer-space" style="height:60px;"></div>
+                            <p style="margin-top:10px;"><strong>៥.២ ${state.lang === 'en' ? 'Conclusion:' : 'សន្និដ្ឋាន:'}</strong></p>
+                            <div class="ws-answer-space" style="height:60px;"></div>
                         </div>
                     </div>
-                    <div class="ws-footer">
-                        <p>SmartEdu AI | ${state.lang === 'en' ? 'Khmer Science Teaching Assistant' : 'ជំនួយការបង្រៀនវិទ្យាសាស្ត្រខ្មែរ'}</p>
+
+                    <div class="ws-footer-official">
+                        <span>SmartEdu AI Assistant</span>
+                        <span>STEM Education Program</span>
                     </div>
                 </div>
+                
                 <div class="ws-actions">
                     <button class="print-btn" onclick="window.print()">
-                        ${state.lang === 'en' ? 'Print / Save as PDF' : 'បោះពុម្ព / រក្សាទុកជា PDF'}
+                        ${state.lang === 'en' ? 'Download PDF' : 'ទាញយកជា PDF'}
+                    </button>
+                    <button class="word-btn" id="export-word-btn">
+                        ${state.lang === 'en' ? 'Download Word (.doc)' : 'ទាញយកជា Word (.doc)'}
                     </button>
                 </div>
             `;
             DOM.wsResult.innerHTML = wsHTML;
-            updateXP(20);
+
+            // Word Export Logic
+            document.getElementById('export-word-btn').addEventListener('click', () => {
+                const content = document.getElementById('printable-worksheet').innerHTML;
+                const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Worksheet</title><style>body{font-family: 'Kantumruy Pro', serif;} table{border-collapse:collapse; width:100%;} th,td{border:1px solid #000; padding:5px;} .ws-section-box{margin-bottom:15px; border:1px solid #eee; padding:10px;} h4{margin:0 0 10px 0; color:#1a2a6c;} .ws-answer-space{border-bottom:1px dotted #000; height:30px;}</style></head><body>";
+                const footer = "</body></html>";
+                const sourceHTML = header + content + footer;
+                const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+                const fileLink = document.createElement("a");
+                document.body.appendChild(fileLink);
+                fileLink.href = source;
+                fileLink.download = `IBL_Worksheet_${selectedLesson.title.en.replace(/\s+/g, '_')}.doc`;
+                fileLink.click();
+                document.body.removeChild(fileLink);
+            });
+
+            updateXP(30);
+        }, 1500);
+    };                    </div>
+                </div>
+                
+                <div class="ws-actions">
+                    <button class="print-btn" onclick="window.print()">
+                        ${state.lang === 'en' ? 'Download PDF' : 'ទាញយកជា PDF'}
+                    </button>
+                    <button class="word-btn" id="export-word-btn">
+                        ${state.lang === 'en' ? 'Download Word (.doc)' : 'ទាញយកជា Word (.doc)'}
+                    </button>
+                </div>
+            `;
+            DOM.wsResult.innerHTML = wsHTML;
+
+            // Word Export Logic
+            document.getElementById('export-word-btn').addEventListener('click', () => {
+                const content = document.getElementById('printable-worksheet').innerHTML;
+                const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Worksheet</title><style>body{font-family: 'Kantumruy Pro', sans-serif;} .ws-answer-space{border-bottom:1px solid #000; height:30px; margin-bottom:10px;}</style></head><body>";
+                const footer = "</body></html>";
+                const sourceHTML = header + content + footer;
+                
+                const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
+                const fileLink = document.createElement("a");
+                document.body.appendChild(fileLink);
+                fileLink.href = source;
+                fileLink.download = 'SmartEdu_Worksheet.doc';
+                fileLink.click();
+                document.body.removeChild(fileLink);
+            });
+
+            updateXP(30);
         }, 1500);
     };
 
