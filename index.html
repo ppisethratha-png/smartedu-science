@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartEdu AI | Khmer Science Teaching Assistant</title>
+    <meta name="description" content="An interactive AI science tutor for Khmer students. Learn science in Khmer and English with SmartEdu AI.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Outfit:wght@300;400;600;800&family=Kantumruy+Pro:wght@300;400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    
+    <!-- PWA & Mobile Meta -->
+    <meta name="theme-color" content="#050b18">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="SmartEdu">
+    <link rel="apple-touch-icon" href="science_ai_mascot.png">
+    <meta name="mobile-web-app-capable" content="yes">
+    <script src="data.js"></script>
+
+
+</head>
+<body class="dark-theme">
+    <div class="stars-container" id="stars-container"></div>
+    <div class="app-container">
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <span class="logo-icon">🔬</span>
+                <h1 class="logo-text">SmartEdu<span>AI</span></h1>
+            </div>
+
+            <div class="user-xp-container">
+                <div class="xp-header">
+                    <span data-en="Level 1 Explorer" data-kh="កម្រិត ១ អ្នករុករក">Level 1 Explorer</span>
+                    <span class="xp-value">350 XP</span>
+                </div>
+                <div class="xp-bar-bg">
+                    <div class="xp-bar-fill" id="xp-fill"></div>
+                </div>
+            </div>
+
+            
+            <nav class="nav-menu">
+                <button class="nav-item active" id="btn-chat">
+                    <span class="icon">💬</span>
+                    <span class="text" data-en="AI Tutor" data-kh="គ្រូបង្រៀន AI">AI Tutor</span>
+                </button>
+                <button class="nav-item" id="btn-quiz">
+                    <span class="icon">📝</span>
+                    <span class="text" data-en="Quick Quiz" data-kh="វិញ្ញាសារខ្លី">Quick Quiz</span>
+                </button>
+                <button class="nav-item" id="btn-library">
+                    <span class="icon">📚</span>
+                    <span class="text" data-en="Library" data-kh="បណ្ណាល័យ">Library</span>
+                </button>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="lang-switch">
+                    <button id="lang-en" class="active">EN</button>
+                    <button id="lang-kh">KH</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="search-bar">
+                    <input type="text" placeholder="Search science topics..." id="search-input">
+                </div>
+                <div class="user-profile">
+                    <div class="avatar">👨‍🎓</div>
+                    <span class="username">Student</span>
+                </div>
+            </header>
+
+            <section id="chat-section" class="content-section active">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chat-messages">
+                        <div class="message ai-message">
+                            <div class="message-content">
+                                <p data-en="Hello! I'm Leo, your Science Assistant. What would you like to learn today?" 
+                                   data-kh="សួស្តី! ខ្ញុំគឺ Leo ជាជំនួយការវិទ្យាសាស្ត្ររបស់អ្នក។ តើអ្នកចង់រៀនអ្វីនៅថ្ងៃនេះ?">
+                                   Hello! I'm Leo, your Science Assistant. What would you like to learn today?
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="chat-input-area">
+                        <div class="input-wrapper">
+                            <button id="mic-btn" class="mic-btn">
+                                <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
+                                    <path d="M12 14c1.66 0 3-1.34 3-3V5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3z"/><path d="M17 11c0 2.76-2.24 5-5 5s-5-2.24-5-5H5c0 3.53 2.61 6.43 6 6.92V21h2v-3.08c3.39-.49 6-3.39 6-6.92h-2z"/>
+                                </svg>
+                            </button>
+                            <input type="text" id="user-input" placeholder="Ask a science question..." autocomplete="off">
+                            <button id="send-btn">
+
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M22 2L11 13M22 2L15 22L11 13M11 13L2 9L22 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="quiz-section" class="content-section">
+                <div class="section-header">
+                    <h2 data-en="Science Quiz" data-kh="វិញ្ញាសារវិទ្យាសាស្ត្រ">Science Quiz</h2>
+                    <div class="grade-selector">
+                        <button class="grade-chip active" data-grade="all" data-en="All" data-kh="ទាំងអស់">All</button>
+                        <button class="grade-chip" data-grade="grade4" data-en="Grade 4" data-kh="ថ្នាក់ទី ៤">Grade 4</button>
+                        <button class="grade-chip" data-grade="grade5" data-en="Grade 5" data-kh="ថ្នាក់ទី ៥">Grade 5</button>
+                        <button class="grade-chip" data-grade="grade6" data-en="Grade 6" data-kh="ថ្នាក់ទី ៦">Grade 6</button>
+                    </div>
+                </div>
+                <div id="quiz-container" class="quiz-grid">
+
+                    <!-- Quiz cards will be injected here -->
+                </div>
+            </section>
+
+            <section id="library-section" class="content-section">
+                <div class="section-header">
+                    <h2 data-en="Science Library" data-kh="បណ្ណាល័យវិទ្យាសាស្ត្រ">Science Library</h2>
+                    <p data-en="Explore curated lessons and scientific materials." data-kh="ស្វែងរកមេរៀន និងឯកសារវិទ្យាសាស្ត្រដែលបានជ្រើសរើស។">Explore curated lessons and scientific materials.</p>
+                </div>
+                <div class="library-grid">
+                    <!-- Textbooks will be injected here -->
+                </div>
+                
+                <div class="section-header" style="margin-top: 3rem;">
+                    <h2 data-en="Lesson Content" data-kh="ខ្លឹមសារមេរៀន">Lesson Content</h2>
+                </div>
+                <div class="library-grid-lessons">
+                    <!-- Lesson cards will be injected here -->
+                </div>
+            </section>
+
+        </main>
+
+        <!-- Right Side Panel -->
+        <aside class="side-panel">
+            <div class="mascot-container">
+                <img src="science_ai_mascot.png" alt="Leo the Science Mascot" id="mascot-img">
+                <div class="mascot-status">
+                    <span class="status-dot"></span>
+                    <span data-en="Online" data-kh="កំពុងដំណើរការ">Online</span>
+                </div>
+            </div>
+
+            <div class="daily-fact">
+                <h3 data-en="Fact of the Day" data-kh="ចំណេះដឹងប្រចាំថ្ងៃ">Fact of the Day</h3>
+                <div class="fact-card">
+                    <p id="fact-text" data-en="Did you know? Sound travels 4 times faster in water than in air." 
+                       data-kh="តើអ្នកដឹងទេ? សំឡេងធ្វើដំណើរលឿនជាង ៤ ដងក្នុងទឹក ធៀបនឹងក្នុងខ្យល់។">
+                       Did you know? Sound travels 4 times faster in water than in air.
+                    </p>
+                </div>
+            </div>
+
+            <div class="quick-stats">
+                <div class="stat-item">
+                    <span class="label" data-en="Questions Asked" data-kh="សំណួរដែលបានសួរ">Questions Asked</span>
+                    <span class="value">12</span>
+                </div>
+                <div class="stat-item">
+                    <span class="label" data-en="Quiz Score" data-kh="ពិន្ទុវិញ្ញាសារ">Quiz Score</span>
+                    <span class="value">85%</span>
+                </div>
+            </div>
+        </aside>
+    </div>
+
+    <!-- Achievement Toast -->
+    <div id="achievement-toast" class="achievement-toast">
+        <div class="achievement-icon">🏆</div>
+        <div class="achievement-text">
+            <h4 id="ach-title">Achievement Unlocked!</h4>
+            <p id="ach-desc">You just earned 50 XP</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+
+</body>
+</html>
