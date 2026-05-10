@@ -34,7 +34,11 @@ document.addEventListener('DOMContentLoaded', () => {
         questionsAsked: document.querySelector('.stat-item:nth-child(1) .value'),
         quizScore: document.querySelector('.stat-item:nth-child(2) .value'),
         factText: document.getElementById('fact-text'),
-        libLessonsGrid: document.querySelector('.library-grid-lessons')
+        libLessonsGrid: document.querySelector('.library-grid-lessons'),
+        wsGradeSelect: document.getElementById('ws-grade-select'),
+        wsTopicInput: document.getElementById('ws-topic-input'),
+        wsGenerateBtn: document.getElementById('generate-ws-btn'),
+        wsResult: document.getElementById('worksheet-result')
     };
 
     // --- Starry Background ---
@@ -84,6 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         if (DOM.userInput) DOM.userInput.placeholder = lang === 'en' ? 'Ask a science question...' : 'សួរសំណួរវិទ្យាសាស្ត្រ...';
         if (DOM.searchInput) DOM.searchInput.placeholder = lang === 'en' ? 'Search science topics...' : 'ស្វែងរកប្រធានបទវិទ្យាសាស្ត្រ...';
+        if (DOM.wsTopicInput) DOM.wsTopicInput.placeholder = lang === 'en' ? 'e.g. Photosynthesis' : 'ឧទាហរណ៍៖ រស្មីសំយោគ';
         if (DOM.factText) DOM.factText.textContent = SCIENCE_FACTS[factIndex][state.lang];
         
         document.getElementById('lang-en').classList.toggle('active', lang === 'en');
@@ -273,6 +278,78 @@ document.addEventListener('DOMContentLoaded', () => {
     if (DOM.sendBtn) DOM.sendBtn.addEventListener('click', handleChat);
     if (DOM.userInput) DOM.userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleChat(); });
     if (DOM.searchInput) DOM.searchInput.addEventListener('input', renderAll);
+
+    // Worksheet Generator Logic
+    const generateWorksheet = () => {
+        const gradeKey = DOM.wsGradeSelect.value;
+        const topic = DOM.wsTopicInput.value.trim().toLowerCase();
+        
+        if (!topic) {
+            alert(state.lang === 'en' ? "Please enter a topic!" : "សូមបញ្ចូលប្រធានបទមេរៀន!");
+            return;
+        }
+
+        // Show loading state
+        DOM.wsResult.innerHTML = `<div class="empty-ws-state"><p>${state.lang === 'en' ? 'Generating...' : 'កំពុងបង្កើត...'}</p></div>`;
+
+        setTimeout(() => {
+            let selectedLesson = null;
+            // Search for lesson
+            const lessons = SCIENCE_DATA[gradeKey].lessons;
+            selectedLesson = lessons.find(l => 
+                l.title.en.toLowerCase().includes(topic) || 
+                l.title.kh.toLowerCase().includes(topic)
+            );
+
+            if (!selectedLesson) {
+                DOM.wsResult.innerHTML = `<div class="empty-ws-state"><p>${state.lang === 'en' ? 'Lesson not found for this grade. Try another topic!' : 'មិនមានមេរៀននេះសម្រាប់ថ្នាក់នេះទេ។ សាកល្បងប្រធានបទផ្សេង!'}</p></div>`;
+                return;
+            }
+
+            const wsHTML = `
+                <div class="printable-ws" id="printable-worksheet">
+                    <div class="ws-header">
+                        <h1>${state.lang === 'en' ? 'Science Worksheet' : 'សន្លឹកកិច្ចការវិទ្យាសាស្ត្រ'}</h1>
+                        <p>${selectedLesson.title[state.lang]}</p>
+                        <div class="ws-info">
+                            <span>${state.lang === 'en' ? 'Name:' : 'ឈ្មោះ:'} ____________________</span>
+                            <span>${state.lang === 'en' ? 'Grade:' : 'ថ្នាក់:'} ${SCIENCE_DATA[gradeKey].title[state.lang]}</span>
+                            <span>${state.lang === 'en' ? 'Date:' : 'កាលបរិច្ឆេទ:'} ___/___/___</span>
+                        </div>
+                    </div>
+                    <div class="ws-body">
+                        <h2>I. ${state.lang === 'en' ? 'Lesson Summary' : 'សង្ខេបមេរៀន'}</h2>
+                        <p>${selectedLesson.content[state.lang]}</p>
+                        
+                        <h2>II. ${state.lang === 'en' ? 'Exercise Questions' : 'សំណួរសិក្សា'}</h2>
+                        ${selectedLesson.quizzes.map((q, i) => `
+                            <div class="ws-question">
+                                <p>${i + 1}. ${q.question[state.lang]}</p>
+                                <div class="ws-answer-space"></div>
+                            </div>
+                        `).join('')}
+                        
+                        <div class="ws-question">
+                            <p>${selectedLesson.quizzes.length + 1}. ${state.lang === 'en' ? 'Explain what you learned from this lesson.' : 'ចូរពន្យល់ពីអ្វីដែលអ្នកបានរៀនពីមេរៀននេះ។'}</p>
+                            <div class="ws-answer-space" style="height:100px;"></div>
+                        </div>
+                    </div>
+                    <div class="ws-footer">
+                        <p>SmartEdu AI | ${state.lang === 'en' ? 'Khmer Science Teaching Assistant' : 'ជំនួយការបង្រៀនវិទ្យាសាស្ត្រខ្មែរ'}</p>
+                    </div>
+                </div>
+                <div class="ws-actions">
+                    <button class="print-btn" onclick="window.print()">
+                        ${state.lang === 'en' ? 'Print / Save as PDF' : 'បោះពុម្ព / រក្សាទុកជា PDF'}
+                    </button>
+                </div>
+            `;
+            DOM.wsResult.innerHTML = wsHTML;
+            updateXP(20);
+        }, 1500);
+    };
+
+    if (DOM.wsGenerateBtn) DOM.wsGenerateBtn.addEventListener('click', generateWorksheet);
 
     // Voice Recognition
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;

@@ -644,3 +644,160 @@ body::before {
 }
 
 
+/* Worksheet Generator Styles */
+.worksheet-creator-card {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    padding: 2rem;
+    border-radius: 24px;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+}
+
+.ws-input-row {
+    display: flex;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.input-group {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 250px;
+}
+
+.input-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent-blue);
+}
+
+.input-group select, .input-group input {
+    background: rgba(0, 0, 0, 0.2);
+    border: 1px solid var(--glass-border);
+    padding: 12px 16px;
+    border-radius: 12px;
+    color: white;
+    outline: none;
+    transition: var(--transition);
+}
+
+.input-group select option {
+    background: var(--bg-dark);
+}
+
+.generate-btn {
+    background: var(--gradient-primary);
+    border: none;
+    padding: 14px;
+    border-radius: 14px;
+    color: white;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition);
+}
+
+.generate-btn:hover {
+    transform: scale(1.02);
+    box-shadow: 0 10px 25px rgba(0, 210, 255, 0.4);
+}
+
+.worksheet-result-container {
+    background: var(--glass-bg);
+    border: 1px solid var(--glass-border);
+    border-radius: 24px;
+    min-height: 400px;
+    padding: 2rem;
+    position: relative;
+}
+
+.empty-ws-state {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    color: var(--text-secondary);
+}
+
+.empty-ws-state .icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    display: block;
+    opacity: 0.3;
+}
+
+/* Printable Worksheet Styling */
+.printable-ws {
+    background: white;
+    color: #333;
+    padding: 40px;
+    border-radius: 8px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    font-family: 'Kantumruy Pro', serif;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.ws-header {
+    text-align: center;
+    border-bottom: 2px solid #333;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.ws-header h1 { color: #1a2a6c; margin-bottom: 10px; }
+.ws-info { display: flex; justify-content: space-between; margin-top: 20px; font-weight: bold; }
+
+.ws-body h2 { 
+    background: #f0f4f8;
+    padding: 10px;
+    font-size: 1.2rem;
+    border-left: 5px solid #1a2a6c;
+    margin: 25px 0 15px 0;
+}
+
+.ws-question { margin-bottom: 25px; }
+.ws-question p { font-weight: 600; margin-bottom: 10px; }
+.ws-answer-space {
+    border-bottom: 1px dotted #999;
+    height: 60px;
+    margin-top: 10px;
+}
+
+.ws-footer {
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    text-align: center;
+    font-size: 0.8rem;
+    color: #888;
+}
+
+.ws-actions {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.print-btn {
+    background: #27ae60;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+@media print {
+    body * { visibility: hidden; }
+    .printable-ws, .printable-ws * { visibility: visible; }
+    .printable-ws { position: absolute; left: 0; top: 0; width: 100%; box-shadow: none; padding: 0; }
+    .ws-actions { display: none; }
+}

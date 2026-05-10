@@ -57,6 +57,10 @@
                     <span class="icon">📚</span>
                     <span class="text" data-en="Library" data-kh="បណ្ណាល័យ">Library</span>
                 </button>
+                <button class="nav-item" id="btn-worksheet">
+                    <span class="icon">📄</span>
+                    <span class="text" data-en="Worksheet Gen" data-kh="បង្កើតសន្លឹកកិច្ចការ">Worksheet Gen</span>
+                </button>
             </nav>
 
             <div class="sidebar-footer">
@@ -141,6 +145,41 @@
                 </div>
                 <div class="library-grid-lessons">
                     <!-- Lesson cards will be injected here -->
+                </div>
+            </section>
+
+            <section id="worksheet-section" class="content-section">
+                <div class="section-header">
+                    <h2 data-en="Worksheet Generator" data-kh="ម៉ាស៊ីនបង្កើតសន្លឹកកិច្ចការ">Worksheet Generator</h2>
+                    <p data-en="Create personalized science worksheets in seconds." data-kh="បង្កើតសន្លឹកកិច្ចការវិទ្យាសាស្ត្រដោយខ្លួនឯងក្នុងរយៈពេលប៉ុន្មានវិនាទី។">Create personalized science worksheets in seconds.</p>
+                </div>
+                
+                <div class="worksheet-creator-card">
+                    <div class="ws-input-row">
+                        <div class="input-group">
+                            <label data-en="Select Grade" data-kh="ជ្រើសរើសថ្នាក់">Select Grade</label>
+                            <select id="ws-grade-select">
+                                <option value="grade4">Grade 4 / ថ្នាក់ទី ៤</option>
+                                <option value="grade5">Grade 5 / ថ្នាក់ទី ៥</option>
+                                <option value="grade6">Grade 6 / ថ្នាក់ទី ៦</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label data-en="Lesson Topic" data-kh="ប្រធានបទមេរៀន">Lesson Topic</label>
+                            <input type="text" id="ws-topic-input" placeholder="e.g. Photosynthesis">
+                        </div>
+                    </div>
+                    <button id="generate-ws-btn" class="generate-btn">
+                        <span data-en="Create Worksheet" data-kh="បង្កើតសន្លឹកកិច្ចការ">Create Worksheet</span>
+                    </button>
+                </div>
+
+                <div id="worksheet-result" class="worksheet-result-container">
+                    <!-- Generated worksheet will appear here -->
+                    <div class="empty-ws-state">
+                        <span class="icon">📝</span>
+                        <p data-en="Your generated worksheet will appear here." data-kh="សន្លឹកកិច្ចការដែលបានបង្កើតនឹងបង្ហាញនៅទីនេះ។">Your generated worksheet will appear here.</p>
+                    </div>
                 </div>
             </section>
 
