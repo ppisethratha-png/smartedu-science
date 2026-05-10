@@ -12,9 +12,9 @@ document.addEventListener('DOMContentLoaded', () => {
         grade: 'all',
         xp: 350,
         activeSection: 'chat',
-        questionsAsked: 12, // Initial from HTML
-        quizAttempts: 20,   // Initial simulation
-        quizCorrect: 17     // 85% from HTML
+        questionsAsked: 12,
+        quizAttempts: 20,
+        quizCorrect: 17
     };
 
     let factIndex = 0;
@@ -137,9 +137,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="lesson-tag" style="background:var(--accent-blue)">${state.lang === 'en' ? 'Textbook' : 'សៀវភៅពុម្ព'}</div>
                     <h3>${book.title[state.lang]}</h3>
                     <p>${state.lang === 'en' ? 'Official Ministry Textbook (PDF)' : 'សៀវភៅពុម្ពផ្លូវការពីក្រសួង (PDF)'}</p>
-                    <a href="${book.file}" target="_blank" class="read-btn" style="text-decoration:none; text-align:center;">
-                        ${state.lang === 'en' ? 'Open PDF' : 'បើកមើល PDF'}
-                    </a>
+                    <div class="ws-actions" style="margin-top:10px;">
+                        <a href="${book.file}" target="_blank" class="read-btn" style="text-decoration:none; text-align:center; padding: 8px 15px;">
+                            ${state.lang === 'en' ? 'Read' : 'អាន'}
+                        </a>
+                        <a href="${book.file}" download class="print-btn" style="text-decoration:none; text-align:center; padding: 8px 15px;">
+                            ${state.lang === 'en' ? 'Download' : 'ទាញយក'}
+                        </a>
+                    </div>
                 `;
                 libGrid.appendChild(card);
             });
@@ -249,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
             let res = '';
             let found = false;
             
-            // Search in SCIENCE_DATA for relevant keywords
             for (const gradeKey in SCIENCE_DATA) {
                 const grade = SCIENCE_DATA[gradeKey];
                 for (const lesson of grade.lessons) {
@@ -279,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (DOM.userInput) DOM.userInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') handleChat(); });
     if (DOM.searchInput) DOM.searchInput.addEventListener('input', renderAll);
 
-    // Worksheet Generator Logic
+    // --- Worksheet Generator Logic ---
     const generateWorksheet = () => {
         const gradeKey = DOM.wsGradeSelect.value;
         const topic = DOM.wsTopicInput.value.trim().toLowerCase();
@@ -407,38 +411,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
             updateXP(30);
         }, 1500);
-    };                    </div>
-                </div>
-                
-                <div class="ws-actions">
-                    <button class="print-btn" onclick="window.print()">
-                        ${state.lang === 'en' ? 'Download PDF' : 'ទាញយកជា PDF'}
-                    </button>
-                    <button class="word-btn" id="export-word-btn">
-                        ${state.lang === 'en' ? 'Download Word (.doc)' : 'ទាញយកជា Word (.doc)'}
-                    </button>
-                </div>
-            `;
-            DOM.wsResult.innerHTML = wsHTML;
-
-            // Word Export Logic
-            document.getElementById('export-word-btn').addEventListener('click', () => {
-                const content = document.getElementById('printable-worksheet').innerHTML;
-                const header = "<html xmlns:o='urn:schemas-microsoft-com:office:office' xmlns:w='urn:schemas-microsoft-com:office:word' xmlns='http://www.w3.org/TR/REC-html40'><head><meta charset='utf-8'><title>Worksheet</title><style>body{font-family: 'Kantumruy Pro', sans-serif;} .ws-answer-space{border-bottom:1px solid #000; height:30px; margin-bottom:10px;}</style></head><body>";
-                const footer = "</body></html>";
-                const sourceHTML = header + content + footer;
-                
-                const source = 'data:application/vnd.ms-word;charset=utf-8,' + encodeURIComponent(sourceHTML);
-                const fileLink = document.createElement("a");
-                document.body.appendChild(fileLink);
-                fileLink.href = source;
-                fileLink.download = 'SmartEdu_Worksheet.doc';
-                fileLink.click();
-                document.body.removeChild(fileLink);
-            });
-
-            updateXP(30);
-        }, 1500);
     };
 
     if (DOM.wsGenerateBtn) DOM.wsGenerateBtn.addEventListener('click', generateWorksheet);
@@ -474,7 +446,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         });
     } else if (DOM.micBtn) {
-        DOM.micBtn.style.display = 'none'; // Hide if not supported
+        DOM.micBtn.style.display = 'none';
     }
 
     // Fact Rotation
